@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Delete {{ object_type }} · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="dialog-card">
+    <span class="danger-icon">!</span>
+
+    <p class="eyebrow">Permanent action</p>
+
+    <h1>Delete this {{ object_type }}?</h1>
+
+    <p>
+      "{{ object }}" will be permanently removed.
+      This cannot be undone.
+    </p>
+
+    <form method="post" class="form-actions">
+      {% csrf_token %}
+
+      <button class="button button-danger" type="submit">
+        Yes, delete
+      </button>
+
+      <a class="button button-quiet" href="{{ cancel_url }}">
+        Cancel
+      </a>
+    </form>
+  </section>
+{% endblock %}

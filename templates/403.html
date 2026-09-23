@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Access denied · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="dialog-card">
+    <span class="danger-icon">403</span>
+
+    <p class="eyebrow">Access denied</p>
+
+    <h1>
+      This page is not available for your role.
+    </h1>
+
+    <p>
+      Your account is working, but you do not have permission
+      to perform this action.
+    </p>
+
+    <a
+      class="button button-primary"
+      href="% url 'dashboard' %"
+    >
+      Return to overview
+    </a>
+  </section>
+{% endblock %}

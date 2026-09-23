@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ newsletter.title }} · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="newsletter-hero">
+    <a class="back-link" href="{% url 'newsletter-list' %}">
+      ← Back to newsletters
+    </a>
+
+    <p class="eyebrow">
+      Curated by
+      {{ newsletter.author.get_full_name|default:newsletter.author.username }}
+    </p>
+
+    <h1>{{ newsletter.title }}</h1>
+
+    <p class="lede">{{ newsletter.description }}</p>
+
+    <p class="muted">
+      {{ newsletter.created_at|date:"j F Y" }}
+
+      {% if newsletter.publisher %}
+        · {{ newsletter.publisher.name }}
+      {% endif %}
+    </p>
+
+    {% if user.role == "editor" or user.role == "journalist" and user == newsletter.author %}
+      <div class="form-actions">
+        <a
+          class="button button-secondary"
+          href="{% url 'newsletter-edit' newsletter.pk %}"
+        >
+          Edit newsletter 
+        </a>
+
+        <a
+          class="button button-danger"
+          href="{% url 'newsletter-delete' newsletter.pk %}"
+        >
+          Delete
+        </a>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="section-heading">
+    <div>
+      <p class="eyebrow">In this edition</p>
+
+      <h2>
+        {{ newsletter.articles.count }}
+        selected article{{ newsletter.articles.count|pluralize }}
+      </h2>
+    </div>
+  </section>
+
+  <div class="card-grid">
+    {% for article in newsletter.articles.all %}
+      {% include "news/article_card.html" %}
+    {% empty %}
+      <div class="empty-state">
+        <p>
+          No articles have been added to this edition.
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

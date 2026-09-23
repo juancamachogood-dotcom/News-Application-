@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Articles · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="section-heading page-heading">
+    <div>
+      <p class="eyebrow">Newsroom</p>
+      <h1>Articles</h1>
+
+      <p class="lede">
+        {% if user.role == "reader" %}
+          Coverage from the sources you follow.
+        {% else %}
+          Published coverage and work in progress.
+        {% endif %}
+      </p>
+    </div>
+
+    {% if user.role == "journalist" %}
+      <a
+        class="button button-primary"
+        href="{% url 'article-create' %}"
+      >
+        Write article
+      </a>
+    {% endif %}
+  </section>
+
+  <div class="card-grid">
+    {% for article in articles %}
+      {% include "news/article_card.html" %}
+    {% empty %}
+      <div class="empty-state">
+        <h2>No articles found</h2>
+        <p>
+          There is nothing available for your account yet.
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

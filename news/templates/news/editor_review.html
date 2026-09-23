@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Review queue · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="section-heading page-heading">
+    <div>
+      <p class="eyebrow">Editor workspace</p>
+      <h1>Review queue</h1>
+
+      <p class="lede">
+        Read each submission carefully before approving it
+        for subscribers.
+      </p>
+    </div>
+
+    <span class="count-badge">
+      {{ articles|length }} pending
+    </span>
+  </section>
+
+  <div class="review-list">
+    {% for article in articles %}
+      <article class="review-card">
+        <div>
+          <div class="card-meta">
+            <span class="status status-draft">
+              Awaiting review
+            </span>
+
+            <span>
+              {{ article.created_at|date:"j M Y, H:i" }}
+            </span>
+          </div>
+
+          <h2>{{ article.title }}</h2>
+
+          <p class="byline-large">
+            By
+            {{ article.author.get_full_name|default:article.author.username }}
+          </p>
+
+          <p>{{ article.content|truncatewords:55 }}</p>
+        </div>
+
+        <div class="review-actions">
+          <a
+            class="button button-secondary"
+            href="{% url 'article-detail' article.pk %}"
+          >
+            Read full article
+          </a>
+
+          <form
+            method="post"
+            action="{% url 'editor-approve' article.pk %}"
+          >
+            {% csrf_token %}
+
+            <button class="button button-primary" type="submit">
+              Approve & notify
+            </button>
+          </form>
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty-state success-state">
+        <h2>The queue is clear</h2>
+        <p>There are no articles awaiting approval.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

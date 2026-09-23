@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · The Daily Brief</title>
+  <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <div class="brand auth-brand">
+      <span class="brand-mark">DB</span>
+      <span>The Daily Brief</span>
+    </div>
+
+    <p class="eyebrow">Welcome back</p>
+    <h1>Sign in to your newsroom</h1>
+    <p class="lede">
+      Access articles, newsletters and tools for your role.
+    </p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p class="form-success">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+      <p class="form-alert">
+        Your username or password was incorrect.
+      </p>
+    {% endif %}
+
+    <form method="post" class="stacked-form">
+      {% csrf_token %}
+
+      <label for="{{ form.username.id_for_label }}">
+        Username
+      </label>
+      {{ form.username }}
+
+      <label for="{{ form.password.id_for_label }}">
+        Password
+      </label>
+      {{ form.password }}
+
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+
+      <button
+        class="button button-primary button-wide"
+        type="submit"
+      >
+        Sign in
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      New to The Daily Brief?
+      <a href="{% url 'signup' %}">Create an account</a>
+    </p>
+    <p class="help-copy">
+      Readers, journalists, editors and publishers can register here.
+    </p>
+  </main>
+</body>
+</html>

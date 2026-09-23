@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ article.title }} · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <article class="article-page">
+    <a class="back-link" href="{% url 'article-list' %}">
+      ← Back to articles
+    </a>
+
+    <div class="article-heading">
+      <div class="card-meta">
+        {% if article.approved %}
+          <span class="status status-live">Published</span>
+        {% else %}
+          <span class="status-draft">
+            Awaiting review
+          </span>
+        {% endif %}
+
+        {% if article.publisher %}
+          <span>{{ article.publisher.name }}</span>
+        {% else %}
+          <span>Independent</span>
+        {% endif %}
+      </div>
+
+      <h1>{{ article.title }}</h1>
+
+      <p class="byline-large">
+        By
+        {{ article.author.get_full_name|default:article.author.username }}
+        · {{ article.created_at|date:"j F Y, H:i" }}
+      </p>
+    </div>
+
+    <div class="article-body">
+      {{ article.content|linebreaks }}
+    </div>
+
+    {% if user.role == "editor" or user.role == "journalist" and user == article.author %}
+      <div class="action-bar">
+        <a
+          class="button button-secondary"
+          href="{% url 'article-edit' article.pk %}"
+        >
+          Edit article
+        </a>
+
+        <a
+          class="button button-danger"
+          href="{% url 'article-delete' article.pk %}"
+        >
+          Delete
+        </a>
+      </div>
+    {% endif %}
+  </article>
+{% endblock %}

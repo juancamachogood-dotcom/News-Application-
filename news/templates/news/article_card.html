@@ -1,0 +1,36 @@
+<article class="content-card">
+  <div class="card-meta">
+    {% if article.approved %}
+      <span class="status status-live">Published</span>
+    {% else %}
+      <span class="status status-draft">Draft</span>
+    {% endif %}
+
+    <time datetime="{{ article.created_at|date:'c' }}">
+      {{ article.created_at|date:"j M Y" }}
+    </time>
+  </div>
+
+  <h3>
+    <a href="{% url 'article-detail' article.pk %}">
+      {{ article.title }}
+    </a>
+  </h3>
+
+  <p>{{ article.content|truncatewords:24 }}</p>
+
+  <div class="byline">
+    <span class="avatar avatar-small">
+      {{ article.author.username|first|upper }}
+    </span>
+
+    <span>
+      By 
+      {{ article.author.get_full_name|default:article.author.username }}
+
+      {% if article.publisher %}
+        <small>{{ article.publisher.name }}</small>
+      {% endif %}
+    </span>
+  </div>
+</article>

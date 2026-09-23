@@ -1,0 +1,38 @@
+# Virtual environments
+.venv/
+venv/
+env/
+source/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local Django data and generated assets
+*.sqlite3
+news_data.json
+staticfiles/
+media/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Tests and coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+
+# Database files and SQLite journal sidecars
+*.db
+*.sqlite
+*.sqlite3-*
+*.sqlite-*

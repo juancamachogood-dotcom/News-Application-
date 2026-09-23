@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Subscriptions · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="form-page wide-form">
+    <div class="form-intro">
+      <p class="eyebrow">Personalise your feed</p>
+
+      <h1>Your subscriptions</h1>
+
+      <p class="lede">
+        Choose the publishers and independent journalists whose
+        approved work should appear in your briefing.
+      </p>
+    </div>
+
+    <form method="post" class="editor-form subscription-form">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <fieldset>
+          <legend>{{ field.label }}</legend>
+          <div class="choice-grid">{{ field }}</div>
+        </fieldset>
+      {% endfor %}
+
+      <button class="button button-primary" type="submit">
+        Save subscriptions
+      </button>
+    </form>
+  </section>
+{% endblock %}

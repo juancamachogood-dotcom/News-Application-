@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Newsletters · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="section-heading page-heading">
+    <div>
+      <p class="eyebrow">Curated editions</p>
+      <h1>Newsletters</h1>
+      <p class="lede">
+        Thoughtful collections of approved coverage.
+      </p>
+    </div>
+
+    {% if user.role == "journalist" or user.role == "editor" %}
+      <a
+        class="button button-primary"
+        href="{% url 'newsletter-create' %}"
+      >
+        Create newsletter
+      </a>
+    {% endif %}
+  </section>
+
+  <div class="newsletter-grid">
+    {% for newsletter in newsletters %}
+      <article class="newsletter-card">
+        <span class="newsletter-number">
+          Edition {{ forloop.revcounter|stringformat:"02d" }}
+        </span>
+
+        <h2>
+          <a href="{% url 'newsletter-detail' newsletter.pk %}">
+            {{ newsletter.title }}
+          </a>
+        </h2>
+
+        <p>
+          {{ newsletter.description|default:"A curated selection from our newsroom."|truncatewords:28 }}
+        </p>
+
+        <div class="card-footer">
+          <span>
+            {{ newsletter.articles.count }}
+            articles{{ newsletter.articles.count|pluralize }}
+          </span>
+
+          <span>
+            {{ newsletter.created_at|date:"j M Y" }}
+          </span>
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty-state">
+        <h2>No newsletter found</h2>
+        <p>Your available editions will appear here.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

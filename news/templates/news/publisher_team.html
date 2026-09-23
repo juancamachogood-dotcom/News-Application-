@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Manage team · {{ publisher.name }}{% endblock %}
+{% block content %}
+<section class="section-heading"><div>
+  <p class="eyebrow">Publisher workspace</p>
+  <h1>{{ publisher.name }} team</h1>
+  <p>Select registered editors and journalists, then save. Uncheck a member to remove them.</p>
+  <p>Team members first create their own account using the registration page.</p>
+</div></section>
+<form method="post" class="stacked-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <fieldset><legend>{{ field.label }}</legend>
+      {{ field.errors }}{{ field }}
+    </fieldset>
+  {% endfor %}
+  <button type="submit" class="button button-primary">Save team</button>
+</form>
+{% endblock %}

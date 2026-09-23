@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account · The Daily Brief</title>
+  <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <div class="brand auth-brand">
+      <span class="brand-mark">DB</span>
+      <span>The Daily Brief</span>
+    </div>
+
+    <p class="eyebrow">Join the newsroom</p>
+    <h1>Create your account</h1>
+    <p class="lede">
+      Choose Reader, Journalist, Editor or Publisher to get started.
+    </p>
+
+    {% if form.non_field_errors %}
+      <div class="form-alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <form method="post" class="stacked-form">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="auth-field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="field-help">{{ field.help_text|safe }}</div>
+          {% endif %}
+          {% for error in field.errors %}
+            <p class="error-text">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <button class="button button-primary button-wide" type="submit">
+        Create account
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Already have an account?
+      <a href="{% url 'login' %}">Sign in</a>
+    </p>
+  </main>
+</body>
+</html>

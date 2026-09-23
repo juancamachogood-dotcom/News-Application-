@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Overview · The Daily Brief
+{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">
+        {{ user.get_role_display }} workspace
+      </p>
+
+      <h1>
+        Good to see you,
+        {{ user.first_name|default:user.username }}.
+      </h1>
+
+      {% if user.role == "reader" %}
+        <p class="lede">
+          Your personal briefing, drawn from the publishers
+          and journalists you follow.
+        </p>
+      {% elif user.role == "journalist" %}
+        <p class="lede">
+          Shape the next story, manage your drafts and curate
+          a compelling newsletter.
+        </p>
+      {% elif user.role == "publisher" %}
+        <p class="lede">Manage your organisation's editors and journalists.</p>
+      {% else %}
+        <p class="lede">
+          Keep the newsroom moving. Review drafts and manage
+          published coverage.
+        </p>
+      {% endif %}
+    </div>
+
+    <div class="hero-actions">
+      {% if user.role == "publisher" %}
+        {% for publisher in user.owned_publishers.all %}
+          <a class="button button-primary" href="{% url 'publisher-team' publisher.pk %}">Manage {{ publisher.name }} team</a>
+        {% endfor %}
+      {% endif %}
+      {% if user.role == "journalist" %}
+        <a
+          class="button button-primary"
+          href="{% url 'article-create' %}"
+        >
+          Write article
+        </a>
+      {% endif %}
+
+      {% if user.role == "editor" %}
+        <a
+          class="button button-primary"
+          href="{% url 'editor-review' %}"
+        >
+          Review articles
+        </a>
+      {% endif %}
+
+      {% if user.role == "reader" %}
+        <a 
+          class="button button-primary"
+          href="{% url 'subscriptions' %}"
+        >
+          Manage subscriptions
+        </a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="stat-grid" aria-label="Account summary">
+    <div class="stat-card">
+      <span>Visible articles</span>
+      <strong>{{ article_count }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Newsletters</span>
+      <strong>{{ newsletter_count }}</strong>
+    </div>
+
+    {% if user.role == "editor" %}
+      <div class="stat-card accent">
+        <span>Awaiting review</span>
+        <strong>{{ pending_count }}</strong>
+      </div>
+    {% endif %}
+
+    {% if user.role == "journalist" %}
+      <div class="stat-card accent">
+        <span>Your drafts</span>
+        <strong>{{ draft_count }}</strong>
+      </div>
+    {% endif %}
+
+    {% if user.role == "reader" %}
+      <div class="stat-card accent">
+        <span>Publishers followed</span>
+        <strong>{{ publisher_count }}</strong>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="section-heading">
+    <div>
+      <p class="eyebrow">Latest coverage</p>
+      <h2>Your recent articles</h2>
+    </div>
+
+    <a class="inline-link" href="{% url 'article-list' %}">
+      View all articles →
+    </a>
+  </section>
+
+  <div class="card-grid">
+    {% for article in recent_articles %}
+      {% include "news/article_card.html" %}
+    {% empty %}
+      <div class="empty-state">
+        <h3>No articles to show yet</h3>
+        <p>
+          {% if user.role == "reader" %}
+            Follow a publisher or journalist to build your personal feed.
+          {% else %}
+            New newsroom coverage will appear here.
+          {% endif %}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

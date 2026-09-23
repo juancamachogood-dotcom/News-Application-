@@ -1,0 +1,70 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A role-based news platform for readers, journalists and editors.">
+  <title>{% block title %}The Daily Brief{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'news/styles.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{% url 'dashboard' %}" aria-label="The Daily Brief home">
+      <span class="brand-mark">DB</span>
+      <span>The Daily Brief</span>
+    </a>
+
+    {% if user.is_authenticated %}
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="{% url 'dashboard' %}">Overview</a>
+        <a href="{% url 'article-list' %}">Articles</a>
+        <a href="{% url 'newsletter-list' %}">Newsletters</a>
+
+        {% if user.role == "reader" %}
+          <a href="{% url 'subscriptions' %}">Subscriptions</a>
+        {% elif user.role == "editor" %}
+          <a href="{% url 'editor-review' %}">Review queue</a>
+        {% elif user.role == "publisher" %}
+          {% for publisher in user.owned_publishers.all %}
+            <a href="{% url 'publisher-team' publisher.pk %}">Manage {{ publisher.name }}</a>
+          {% endfor %}
+        {% endif %}
+      </nav>
+
+      <div class="account-menu">
+        <span class="avatar" aria-hidden="true">
+          {{ user.username|first|upper }}
+        </span>
+
+        <span>
+          <strong>{{ user.get_full_name|default:user.username }}</strong>
+          <small>{{ user.get_role_display }}</small>
+        </span>
+
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="text-button" type="submit">Sign out</button>
+        </form>
+      </div>
+    {% endif %}
+  </header>
+
+  {% if messages %}
+    <div class="messages" aria-live="polite">
+      {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="page-shell">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>The Daily Brief · Django News Application</p>
+    <a href="/api/">Browse API</a>
+  </footer>
+</body>
+</html>

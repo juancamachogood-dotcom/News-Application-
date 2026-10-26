@@ -1,10 +1,22 @@
+"""Define role-based access rules for articles and newsletters."""
+
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 from .models import User
 
 
 def can_edit_content(user, content):
-    """Require a current editor role or the current journalist's authorship."""
+    """Return whether the user may edit the supplied content.
+    
+    Editors may edit any content. Journalists may edit only content
+    they authored.
+
+    :param user: User whose role and identity are checked.
+    :param content: Article or newsletter containing an author_id.
+    :return: True if editing is permitted; otherwise False.
+    :rtype: bool
+    """
+
     return user.role == User.Role.EDITOR or (
         user.role == User.Role.JOURNALIST and content.author_id == user.pk
     )

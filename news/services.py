@@ -1,3 +1,4 @@
+"""Send subscriber notifications and share article approvals."""
 import logging
 
 import requests
@@ -9,7 +10,17 @@ logger = logging.getLogger(__name__)
 
 
 def notify_article_subscribers(article):
-    """Email each subscribed address once and return the recipient count."""
+    """Send article notifications to unique subscriber email addresses.
+    
+    Collect subscribers of the author and, when present, the publisher.
+    Exclude empty addresses and remove duplicates. Email delivery errors
+    propagate to the caller.
+    
+    :param article: Article whose title and content will be emailed.
+    :return: Number of unique recipient addresses.
+    :rtype: int
+    """
+
     recipients = set(
         article.author.journalist_subscribers.exclude(email="").values_list(
             "email", flat=True
@@ -37,7 +48,16 @@ def notify_article_subscribers(article):
 
 
 def share_approved_article(article):
-    """POST approval to the configured API; failure does not undo approval."""
+    """Send an article's ID to the configured approval API.
+    
+    Authenticate using the author's API token. Log request failures
+    and return False when they occur.
+    
+    :param article: Approved article to share with the API.
+    :return: True when the request succeeds; False on a request error.
+    :rtype: bool
+    """
+    
     try:
         token, _ = Token.objects.get_or_create(user=article.author)
         response = requests.post(

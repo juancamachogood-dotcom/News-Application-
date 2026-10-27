@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>News Application documentation &#8212; News Application 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="news-application-documentation">
+<h1>News Application documentation<a class="headerlink" href="#news-application-documentation" title="Link to this heading">¶</a></h1>
+<p>A Django news application for readers, journalists, editors and publishers.
+This page explains the article model, content permissions and notification
+services.</p>
+<section id="module-news.models">
+<span id="article-model"></span><h2>Article model<a class="headerlink" href="#module-news.models" title="Link to this heading">¶</a></h2>
+<p>Define database models for users, publishers, article and newsletters.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.Article">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Article" title="Link to this definition">¶</a></dt>
+<dd><p>Represent a news article and its editorial approval status.</p>
+<p>Store the article’s title, content, author and optional publisher.
+New articles start unapproved. Queries use newest-first ordering
+unless another order is requested.</p>
+<p>Model validation checks that the author is a journalist and belongs 
+to the selected publisher when a publisher is provided.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.models.Article.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Article.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Article.clean" title="Link to this definition">¶</a></dt>
+<dd><p>Validate the article’s author and publisher relationship.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>django.core.exceptions.ValidationError</strong> – If the author is not a journalist or does not belong to 
+the selected publisher.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-news.permissions">
+<span id="content-permissions"></span><h2>Content permissions<a class="headerlink" href="#module-news.permissions" title="Link to this heading">¶</a></h2>
+<p>Define role-based access rules for articles and newsletters.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.permissions.can_edit_content">
+<span class="sig-prename descclassname"><span class="pre">news.permissions.</span></span><span class="sig-name descname"><span class="pre">can_edit_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/permissions.html#can_edit_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.can_edit_content" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the user may edit the supplied content.</p>
+<p>Editors may edit any content. Journalists may edit only content
+they authored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – User whose role and identity are checked.</p></li>
+<li><p><strong>content</strong> – Article or newsletter containing an author_id.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if editing is permitted; otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.permissions.ArticlePermission">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.permissions.</span></span><span class="sig-name descname"><span class="pre">ArticlePermission</span></span><a class="reference internal" href="_modules/news/permissions.html#ArticlePermission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.ArticlePermission" title="Link to this definition">¶</a></dt>
+<dd><p>Enforce article creation, editing and approval rules by role.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.permissions.ArticlePermission.has_permission">
+<span class="sig-name descname"><span class="pre">has_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/permissions.html#ArticlePermission.has_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.ArticlePermission.has_permission" title="Link to this definition">¶</a></dt>
+<dd><p>Allow the action only when the caller’s role permits it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.permissions.ArticlePermission.has_object_permission">
+<span class="sig-name descname"><span class="pre">has_object_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/permissions.html#ArticlePermission.has_object_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.ArticlePermission.has_object_permission" title="Link to this definition">¶</a></dt>
+<dd><p>Check read or mutation access for this content object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.permissions.NewsletterPermission">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.permissions.</span></span><span class="sig-name descname"><span class="pre">NewsletterPermission</span></span><a class="reference internal" href="_modules/news/permissions.html#NewsletterPermission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.NewsletterPermission" title="Link to this definition">¶</a></dt>
+<dd><p>Allow staff to create newsletters and edit permitted content.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.permissions.NewsletterPermission.has_permission">
+<span class="sig-name descname"><span class="pre">has_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/permissions.html#NewsletterPermission.has_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.NewsletterPermission.has_permission" title="Link to this definition">¶</a></dt>
+<dd><p>Allow the action only when the caller’s role permits it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.permissions.NewsletterPermission.has_object_permission">
+<span class="sig-name descname"><span class="pre">has_object_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/permissions.html#NewsletterPermission.has_object_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.permissions.NewsletterPermission.has_object_permission" title="Link to this definition">¶</a></dt>
+<dd><p>Check read or mutation access for this content object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-news.services">
+<span id="notification-services"></span><h2>Notification services<a class="headerlink" href="#module-news.services" title="Link to this heading">¶</a></h2>
+<p>Send subscriber notifications and share article approvals.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.services.notify_article_subscribers">
+<span class="sig-prename descclassname"><span class="pre">news.services.</span></span><span class="sig-name descname"><span class="pre">notify_article_subscribers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/services.html#notify_article_subscribers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.services.notify_article_subscribers" title="Link to this definition">¶</a></dt>
+<dd><p>Send article notifications to unique subscriber email addresses.</p>
+<p>Collect subscribers of the author and, when present, the publisher.
+Exclude empty addresses and remove duplicates. Email delivery errors
+propagate to the caller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>article</strong> – Article whose title and content will be emailed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of unique recipient addresses.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.services.share_approved_article">
+<span class="sig-prename descclassname"><span class="pre">news.services.</span></span><span class="sig-name descname"><span class="pre">share_approved_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/services.html#share_approved_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.services.share_approved_article" title="Link to this definition">¶</a></dt>
+<dd><p>Send an article’s ID to the configured approval API.</p>
+<p>Authenticate using the author’s API token. Log request failures
+and return False when they occur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>article</strong> – Approved article to share with the API.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True when the request succeeds; False on a request error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="indices-and-search">
+<h2>Indices and search<a class="headerlink" href="#indices-and-search" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">News Application</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Juan Camacho.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.2.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

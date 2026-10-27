@@ -36,3 +36,6 @@ htmlcov/
 *.sqlite
 *.sqlite3-*
 *.sqlite-*
+
+# Sphinx temporary build cache
+.doctrees/

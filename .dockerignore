@@ -1,0 +1,35 @@
+# Git history
+.git/
+
+# Local Python environments
+.venv/
+venv/
+env/
+
+# Python cache files
+**/__pycache__/
+**/*.py[cod]
+
+# Environment files and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Local databases and data
+**/*.sqlite3
+**/*.sqlite3-*
+**/*.sqlite
+**/*.sqlite-*
+**/*.db
+news_data.json
+media/
+
+# Documentation and generated assets
+docs/
+staticfiles/
+
+# Editor and operating system files
+.vscode/
+.idea/
+**/.DS_Store

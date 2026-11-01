@@ -92,6 +92,16 @@ performed as part of these fixes.
   dashboard access in the original Docker container.
 - No project files or Docker images were uploaded.
 
-This confirms a successful local rebuild and test run. Testing on a
-different computer or Docker playground has not been performed, so that
-assignment requirement remains unverified.
+The local verification above was followed by the remote check below.
+
+## Remote Docker validation - 1 November 2026
+
+- Environment: Google Cloud Shell, a remote Linux environment.
+- Source: the public GitHub repository's main branch.
+- Database: SQLite.
+- Successfully built the image `news-application:cloud-check`.
+- Ran `python manage.py test --verbosity 2` inside a temporary container.
+- Result: all 48 tests passed in 138.846 seconds.
+- Application startup completed database migrations successfully.
+- Django system checks reported no issues.
+- The login page loaded through Cloud Shell Web Preview on port 8080.

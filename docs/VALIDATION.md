@@ -78,3 +78,20 @@ SMTP delivery has not been configured. The local receiver is tested directly.
 The design document records the current design and does not claim to establish
 when planning occurred. No browser visual audit or production deployment was
 performed as part of these fixes.
+
+
+## Docker validation - 31 October 2026
+
+- Tested source commit: `e1fa365`.
+- Environment: Docker Desktop on the development Mac, using SQLite.
+- Built `news-application:verification` from committed Git files only,
+  using the local `desktop-linux` builder with `--no-cache` and `--load`.
+- Ran the automated tests in a new temporary container.
+- Result: all 48 tests passed in 25.457 seconds.
+- Earlier browser testing confirmed reader registration, login and
+  dashboard access in the original Docker container.
+- No project files or Docker images were uploaded.
+
+This confirms a successful local rebuild and test run. Testing on a
+different computer or Docker playground has not been performed, so that
+assignment requirement remains unverified.

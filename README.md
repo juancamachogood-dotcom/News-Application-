@@ -242,3 +242,100 @@ The development settings and runserver workflow here are for local coursework.
 - [Django installation](https://docs.djangoproject.com/en/6.0/intro/install/)
 - [python-dotenv configuration](https://bbc2.github.io/python-dotenv/)
 - [PEP 257 docstring conventions](https://peps.python.org/pep-0257/)
+
+
+## Run with Docker Desktop
+
+Start Docker Desktop and open a terminal in the project root.
+
+This setup runs the application locally using SQLite and Django's
+development server.
+
+### Build the image
+
+```bash
+docker --context desktop-linux build --builder desktop-linux --load -t news-application:local .
+```
+
+### Configure the application
+
+If you do not already have a `.env` file, copy `.env.example` to `.env`.
+Set `DJANGO_SECRET_KEY` to your own random secret, following the environment
+configuration instructions above. Keep `.env` private.
+
+The command below selects SQLite, overriding the MariaDB setting in `.env`.
+No MariaDB server is needed for this Docker demonstration.
+
+### Create and start the container
+
+Run this once when creating a new container:
+
+```bash
+docker --context desktop-linux run \
+  --name news-capstone \
+  --pull=never \
+  --env-file .env \
+  --env DB_ENGINE=sqlite \
+  -p 127.0.0.1:8000:8000 \
+  news-application:local
+```
+
+Database migrations run automatically when the container starts.
+
+Open http://127.0.0.1:8000/ in your browser, then register and sign in.
+Use this browser address even though the server logs display `0.0.0.0`.
+
+### Stop and restart
+
+Press Control+C in the terminal running the application to stop it.
+
+To restart the existing container:
+
+```bash
+docker --context desktop-linux start -a news-capstone
+```
+
+
+Accounts and content remain when this container is stopped and restarted.
+They are stored inside the container; removing it deletes that database.
+Rebuilding the image does not update an existing container.
+
+### Run automated tests
+
+While the container is running, open another terminal and run:
+
+```bash
+docker --context desktop-linux exec news-capstone python manage.py test --verbosity 2
+```
+
+The tests use a separate temporary test database.
+
+## Build and view the documentation
+
+The project uses Sphinx to document its models, permissions and notification
+services. Generated HTML is included in the repository for this capstone.
+
+From the project root, activate the virtual environment created during setup
+and install the documentation dependencies:
+
+```bash
+source .venv/bin/activate
+python -m pip install -r requirements-docs.txt
+```
+
+Build the HTML documentation:
+
+```bash
+python -m sphinx -b html -W --keep-going docs docs/_build/html
+```
+
+The `-W` option makes documentation warnings count as build failures.
+
+On macOS, open the generated documentation with:
+
+```bash
+open docs/_build/html/index.html
+```
+
+Rebuild the documentation after changing documented Python code or the
+documentation source files. Keep the updated HTML in the repository.

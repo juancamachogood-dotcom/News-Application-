@@ -7,7 +7,7 @@ from .models import User
 
 def can_edit_content(user, content):
     """Return whether the user may edit the supplied content.
-    
+
     Editors may edit any content. Journalists may edit only content
     they authored.
 

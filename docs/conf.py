@@ -16,7 +16,7 @@ django.setup()
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Project information -----------------------------------------------------
+# -- Project metadata -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'News Application'
@@ -26,7 +26,7 @@ author = 'Juan Camacho'
 version = '1.0'
 release = '1.0'
 
-# -- General configuration ---------------------------------------------------
+# -- Sphinx extensions and build setting --------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
@@ -38,8 +38,7 @@ templates_path = []
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
-
-# -- Options for HTML output -------------------------------------------------
+# -- HTML appearance -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'alabaster'

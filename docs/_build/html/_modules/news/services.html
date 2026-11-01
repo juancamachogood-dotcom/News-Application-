@@ -46,11 +46,11 @@
 <a class="viewcode-back" href="../../index.html#news.services.notify_article_subscribers">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">notify_article_subscribers</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Send article notifications to unique subscriber email addresses.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Collect subscribers of the author and, when present, the publisher.</span>
 <span class="sd">    Exclude empty addresses and remove duplicates. Email delivery errors</span>
 <span class="sd">    propagate to the caller.</span>
-<span class="sd">    </span>
+
 <span class="sd">    :param article: Article whose title and content will be emailed.</span>
 <span class="sd">    :return: Number of unique recipient addresses.</span>
 <span class="sd">    :rtype: int</span>
@@ -87,15 +87,15 @@
 <a class="viewcode-back" href="../../index.html#news.services.share_approved_article">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">share_approved_article</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Send an article's ID to the configured approval API.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Authenticate using the author's API token. Log request failures</span>
 <span class="sd">    and return False when they occur.</span>
-<span class="sd">    </span>
+
 <span class="sd">    :param article: Approved article to share with the API.</span>
 <span class="sd">    :return: True when the request succeeds; False on a request error.</span>
 <span class="sd">    :rtype: bool</span>
 <span class="sd">    """</span>
-    
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">token</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Token</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">author</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>

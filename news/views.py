@@ -30,6 +30,7 @@ from .permissions import (
     can_edit_content,
 )
 from .serializers import (
+    ApprovedArticleReceiptSerializer,
     ArticleSerializer,
     NewsletterSerializer,
     PublisherSerializer,
@@ -397,8 +398,14 @@ def approved_article_receiver(request):
             {"detail": "Only newsroom staff can log approved articles."},
             status=status.HTTP_403_FORBIDDEN,
         )
+
+    serializer = ApprovedArticleReceiptSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
     article = get_object_or_404(
-        Article, pk=request.data.get("article"), approved=True
+        Article,
+        pk=serializer.validated_data["article"],
+        approved=True
     )
     if not can_edit_content(request.user, article):
         return Response(

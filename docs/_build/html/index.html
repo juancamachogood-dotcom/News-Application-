@@ -46,7 +46,7 @@ services.</p>
 <p>Store the article’s title, content, author and optional publisher.
 New articles start unapproved. Queries use newest-first ordering
 unless another order is requested.</p>
-<p>Model validation checks that the author is a journalist and belongs 
+<p>Model validation checks that the author is a journalist and belongs
 to the selected publisher when a publisher is provided.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="news.models.Article.clean">
@@ -54,7 +54,7 @@ to the selected publisher when a publisher is provided.</p>
 <dd><p>Validate the article’s author and publisher relationship.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>django.core.exceptions.ValidationError</strong> – If the author is not a journalist or does not belong to 
+<dd class="field-odd"><p><strong>django.core.exceptions.ValidationError</strong> – If the author is not a journalist or does not belong to
 the selected publisher.</p>
 </dd>
 </dl>

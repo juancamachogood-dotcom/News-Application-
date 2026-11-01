@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import Article, Newsletter, Publisher, User
 
 
+class ApprovedArticleReceiptSerializer(serializers.Serializer):
+    """Validate the article ID supplied to the approval receiver."""
+
+    article = serializers.IntegerField(min_value=1)
+
+
 class UserSerializer(serializers.ModelSerializer):
     """Serialize public account identity and newsroom role fields."""
 

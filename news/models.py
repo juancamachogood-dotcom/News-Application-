@@ -63,12 +63,12 @@ class User(AbstractUser):
 
 class Article(models.Model):
     """Represent a news article and its editorial approval status.
-    
+
     Store the article's title, content, author and optional publisher.
     New articles start unapproved. Queries use newest-first ordering
     unless another order is requested.
-    
-    Model validation checks that the author is a journalist and belongs 
+
+    Model validation checks that the author is a journalist and belongs
     to the selected publisher when a publisher is provided.
     """
 
@@ -95,12 +95,12 @@ class Article(models.Model):
 
     def clean(self):
         """Validate the article's author and publisher relationship.
-        
+
         :raises django.core.exceptions.ValidationError:
-            If the author is not a journalist or does not belong to 
+            If the author is not a journalist or does not belong to
             the selected publisher.
         """
-        
+
         super().clean()
         if self.author_id and self.author.role != User.Role.JOURNALIST:
             raise ValidationError(

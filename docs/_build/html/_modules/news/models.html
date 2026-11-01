@@ -98,12 +98,12 @@
 <a class="viewcode-back" href="../../index.html#news.models.Article">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Represent a news article and its editorial approval status.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Store the article's title, content, author and optional publisher.</span>
 <span class="sd">    New articles start unapproved. Queries use newest-first ordering</span>
 <span class="sd">    unless another order is requested.</span>
-<span class="sd">    </span>
-<span class="sd">    Model validation checks that the author is a journalist and belongs </span>
+
+<span class="sd">    Model validation checks that the author is a journalist and belongs</span>
 <span class="sd">    to the selected publisher when a publisher is provided.</span>
 <span class="sd">    """</span>
 
@@ -132,12 +132,12 @@
 <a class="viewcode-back" href="../../index.html#news.models.Article.clean">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Validate the article's author and publisher relationship.</span>
-<span class="sd">        </span>
+
 <span class="sd">        :raises django.core.exceptions.ValidationError:</span>
-<span class="sd">            If the author is not a journalist or does not belong to </span>
+<span class="sd">            If the author is not a journalist or does not belong to</span>
 <span class="sd">            the selected publisher.</span>
 <span class="sd">        """</span>
-        
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">author_id</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">role</span> <span class="o">!=</span> <span class="n">User</span><span class="o">.</span><span class="n">Role</span><span class="o">.</span><span class="n">JOURNALIST</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
